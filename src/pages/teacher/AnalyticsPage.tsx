@@ -66,7 +66,12 @@ export default function AnalyticsPage() {
                   stat.color === "amber" && (isDark ? "bg-amber-500/10" : "bg-amber-100"),
                   stat.color === "violet" && (isDark ? "bg-violet-500/10" : "bg-violet-100"),
                 )}>
-                  <stat.icon className={cn("w-4 h-4", `text-${stat.color}-500`)} />
+                  <stat.icon className={cn("w-4 h-4",
+                    stat.color === "sky" && "text-sky-500",
+                    stat.color === "emerald" && "text-emerald-500",
+                    stat.color === "amber" && "text-amber-500",
+                    stat.color === "violet" && "text-violet-500",
+                  )} />
                 </div>
                 <p className="text-2xl font-bold">{stat.value}</p>
                 <p className={cn("text-xs mt-0.5", isDark ? "text-white/35" : "text-slate-500")}>{stat.label}</p>
