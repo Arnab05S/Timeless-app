@@ -125,7 +125,7 @@ export default function TeacherDashboard() {
         {/* AI Insights */}
         <Reveal className="mb-6">
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-sky-100 to-emerald-50 dark:from-sky-500/20 dark:to-emerald-500/20 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-sky-100 to-emerald-50 flex items-center justify-center">
               <Sparkles className="w-4 h-4 text-sky-500" />
             </div>
             <h3 className="text-lg font-semibold">AI Class Insights</h3>

@@ -133,7 +133,7 @@ export default function ProfilePage() {
                 className={cn("flex items-center gap-3 px-4 py-3.5 cursor-pointer transition-colors", i < settings.length - 1 && "border-b", isDark ? "border-white/[0.03]" : "border-slate-100")}
                 onClick={item.action}>
                 <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center", item.color === "sky" && (isDark ? "bg-sky-500/10" : "bg-sky-100"), item.color === "emerald" && (isDark ? "bg-emerald-500/10" : "bg-emerald-100"), item.color === "violet" && (isDark ? "bg-violet-500/10" : "bg-violet-100"), item.color === "amber" && (isDark ? "bg-amber-500/10" : "bg-amber-100"), item.color === "slate" && (isDark ? "bg-white/5" : "bg-slate-100"))}>
-                  <item.icon className={cn("w-4 h-4", item.color === "sky" && "text-[#0ea5e9] dark:text-[#38bdf8]", item.color === "emerald" && "text-[#06d6a0]", item.color === "violet" && "text-[#8b5cf6] dark:text-[#a78bfa]", item.color === "amber" && "text-[#f59e0b] dark:text-[#ffd166]", item.color === "slate" && (isDark ? "text-white/40" : "text-slate-500"))} />
+                  <item.icon className={cn("w-4 h-4", item.color === "sky" && (isDark ? "text-[#38bdf8]" : "text-[#0ea5e9]"), item.color === "emerald" && "text-[#06d6a0]", item.color === "violet" && (isDark ? "text-[#a78bfa]" : "text-[#8b5cf6]"), item.color === "amber" && (isDark ? "text-[#ffd166]" : "text-[#f59e0b]"), item.color === "slate" && (isDark ? "text-white/40" : "text-slate-500"))} />
                 </div>
                 <span className="text-sm font-medium flex-1">{item.label}</span>
                 {item.value && <span className={cn("text-xs", isDark ? "text-white/25" : "text-slate-400")}>{item.value}</span>}
@@ -171,7 +171,7 @@ export default function ProfilePage() {
                   <div className="flex gap-2">
                     {subjectColors.map((color) => (
                       <motion.button key={color} whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }} onClick={() => setSubjectColor(color)}
-                        className={cn("w-8 h-8 rounded-xl transition-all cursor-pointer", subjectColor === color ? "ring-2 ring-offset-2 ring-offset-white dark:ring-offset-[#0a1128]" : "opacity-50 hover:opacity-80")}
+                        className={cn("w-8 h-8 rounded-xl transition-all cursor-pointer", subjectColor === color ? (isDark ? "ring-2 ring-offset-2 ring-offset-[#0a1128]" : "ring-2 ring-offset-2 ring-offset-white") : "opacity-50 hover:opacity-80")}
                         style={{ backgroundColor: color, ...(subjectColor === color ? { boxShadow: `0 0 0 2px ${color}40` } : {}) }} />
                     ))}
                   </div>

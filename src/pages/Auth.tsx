@@ -418,7 +418,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     {error && <p className="mt-3 text-sm text-red-500 text-center">{error}</p>}
                     <p className={cn("text-sm text-center mt-4", isDark ? "text-white/30" : "text-slate-400")}>
                       Didn't receive a code?{" "}
-                      <Button variant="link" className="p-0 h-auto text-[#0ea5e9] dark:text-[#38bdf8]" onClick={() => setStep("signIn")}>
+                      <Button variant="link" className={cn("p-0 h-auto", isDark ? "text-[#38bdf8]" : "text-[#0ea5e9]")} onClick={() => setStep("signIn")}>
                         Try again
                       </Button>
                     </p>

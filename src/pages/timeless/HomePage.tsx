@@ -88,6 +88,16 @@ export default function HomePage() {
     { icon: TrendingUp, label: "Completion", value: `${progress}%`, sub: "of today's schedule", color: "violet" },
   ];
 
+  const iconColor = (color: string) => {
+    const map: Record<string, string> = {
+      sky: isDark ? "text-[#38bdf8]" : "text-[#0ea5e9]",
+      amber: isDark ? "text-[#ffd166]" : "text-[#f59e0b]",
+      emerald: "text-[#06d6a0]",
+      violet: isDark ? "text-[#a78bfa]" : "text-[#8b5cf6]",
+    };
+    return map[color] || "";
+  };
+
   return (
     <div className="px-6 pt-6">
       <motion.div
@@ -130,9 +140,7 @@ export default function HomePage() {
             <motion.div
               className={cn(
                 "glass-card p-6 border-2",
-                isDark
-                  ? "bg-sky-500/[0.03] border-sky-500/20"
-                  : "bg-sky-50 border-sky-200",
+                isDark ? "bg-sky-500/[0.03] border-sky-500/20" : "bg-sky-50 border-sky-200",
               )}
               whileHover={{ scale: 1.01 }}
             >
@@ -142,7 +150,7 @@ export default function HomePage() {
                   animate={{ rotate: [0, -5, 5, 0] }}
                   transition={{ duration: 3, repeat: Infinity }}
                 >
-                  <Sparkles className="w-6 h-6 text-[#0ea5e9] dark:text-[#38bdf8]" />
+                  <Sparkles className={cn("w-6 h-6", isDark ? "text-[#38bdf8]" : "text-[#0ea5e9]")} />
                 </motion.div>
                 <div className="flex-1">
                   <h3 className="text-base font-semibold mb-1">Welcome to Timeless</h3>
@@ -183,15 +191,7 @@ export default function HomePage() {
                     stat.color === "violet" && (isDark ? "bg-violet-500/10" : "bg-violet-100"),
                   )}
                 >
-                  <stat.icon
-                    className={cn(
-                      "w-4 h-4",
-                      stat.color === "sky" && "text-[#0ea5e9] dark:text-[#38bdf8]",
-                      stat.color === "amber" && "text-[#f59e0b] dark:text-[#ffd166]",
-                      stat.color === "emerald" && "text-[#06d6a0]",
-                      stat.color === "violet" && "text-[#8b5cf6] dark:text-[#a78bfa]",
-                    )}
-                  />
+                  <stat.icon className={cn("w-4 h-4", iconColor(stat.color))} />
                 </div>
                 <p className="text-2xl font-bold">{stat.value}</p>
                 <p className={cn("text-xs mt-0.5", isDark ? "text-white/35" : "text-slate-500")}>{stat.label}</p>
@@ -232,7 +232,7 @@ export default function HomePage() {
                 animate={{ rotate: [0, -3, 3, 0] }}
                 transition={{ duration: 4, repeat: Infinity }}
               >
-                <Sparkles className="w-5 h-5 text-[#0ea5e9] dark:text-[#38bdf8]" />
+                <Sparkles className={cn("w-5 h-5", isDark ? "text-[#38bdf8]" : "text-[#0ea5e9]")} />
               </motion.div>
               <div className="flex-1">
                 <h3 className="text-sm font-semibold mb-1">AI Recommendation</h3>
@@ -245,10 +245,7 @@ export default function HomePage() {
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Button
                       size="sm"
-                      className={cn(
-                        "text-xs cursor-pointer",
-                        isDark ? "bg-sky-500/10 text-[#38bdf8] hover:bg-sky-500/20" : "bg-sky-100 text-sky-700 hover:bg-sky-200",
-                      )}
+                      className={cn("text-xs cursor-pointer", isDark ? "bg-sky-500/10 text-[#38bdf8] hover:bg-sky-500/20" : "bg-sky-100 text-sky-700 hover:bg-sky-200")}
                       onClick={() => navigate("/app/learn/flashcards")}
                     >
                       <Brain className="w-3.5 h-3.5 mr-1.5" />
@@ -258,10 +255,7 @@ export default function HomePage() {
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Button
                       size="sm"
-                      className={cn(
-                        "text-xs cursor-pointer",
-                        isDark ? "bg-amber-500/10 text-amber-400 hover:bg-amber-500/20" : "bg-amber-100 text-amber-700 hover:bg-amber-200",
-                      )}
+                      className={cn("text-xs cursor-pointer", isDark ? "bg-amber-500/10 text-amber-400 hover:bg-amber-500/20" : "bg-amber-100 text-amber-700 hover:bg-amber-200")}
                       onClick={() => navigate("/app/learn/quiz")}
                     >
                       <Zap className="w-3.5 h-3.5 mr-1.5" />
@@ -360,15 +354,7 @@ export default function HomePage() {
                     whileHover={{ rotate: [0, -8, 8, 0] }}
                     transition={{ duration: 0.3 }}
                   >
-                    <action.icon
-                      className={cn(
-                        "w-5 h-5",
-                        action.color === "sky" && "text-[#0ea5e9] dark:text-[#38bdf8]",
-                        action.color === "amber" && "text-[#f59e0b] dark:text-[#ffd166]",
-                        action.color === "emerald" && "text-[#06d6a0]",
-                        action.color === "violet" && "text-[#8b5cf6] dark:text-[#a78bfa]",
-                      )}
-                    />
+                    <action.icon className={cn("w-5 h-5", iconColor(action.color))} />
                   </motion.div>
                   <p className="text-sm font-medium">{action.label}</p>
                   <p className={cn("text-[10px] mt-0.5", isDark ? "text-white/25" : "text-slate-400")}>{action.sub}</p>
@@ -392,7 +378,7 @@ export default function HomePage() {
                   className="glass-card-light px-4 py-3 flex items-center gap-3 hover-lift"
                 >
                   <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shrink-0", isDark ? "bg-sky-500/10" : "bg-sky-100")}>
-                    <BookOpen className="w-4 h-4 text-[#0ea5e9] dark:text-[#38bdf8]" />
+                    <BookOpen className={cn("w-4 h-4", isDark ? "text-[#38bdf8]" : "text-[#0ea5e9]")} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{task.title}</p>

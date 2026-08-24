@@ -89,7 +89,7 @@ export default function FlashcardsPage() {
 
           <div className="flex items-center justify-center gap-4 pb-4">
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-              <Button size="lg" variant="outline" className="w-20 h-20 rounded-2xl border-red-300 dark:border-red-500/30 text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 cursor-pointer" onClick={handleDontKnow}>
+              <Button size="lg" variant="outline" className={cn("w-20 h-20 rounded-2xl cursor-pointer", isDark ? "border-red-500/30 text-red-400 hover:bg-red-500/10" : "border-red-300 text-red-500 hover:bg-red-50")} onClick={handleDontKnow}>
                 <X className="w-8 h-8" />
               </Button>
             </motion.div>
@@ -99,7 +99,7 @@ export default function FlashcardsPage() {
               </Button>
             </motion.div>
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-              <Button size="lg" className="w-20 h-20 rounded-2xl bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-200 dark:hover:bg-emerald-500/30 cursor-pointer" onClick={handleKnow}>
+              <Button size="lg" className={cn("w-20 h-20 rounded-2xl cursor-pointer", isDark ? "bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30" : "bg-emerald-100 text-emerald-600 hover:bg-emerald-200")} onClick={handleKnow}>
                 <Check className="w-8 h-8" />
               </Button>
             </motion.div>

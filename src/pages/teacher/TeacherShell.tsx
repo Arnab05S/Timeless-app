@@ -59,7 +59,7 @@ export default function TeacherShell() {
                   className={cn(
                     "flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all duration-300 relative",
                     isCreate && active
-                      ? "text-[#06d6a0] dark:text-[#06d6a0]"
+                      ? theme === "dark" ? "text-[#06d6a0]" : "text-[#059669]"
                       : active
                         ? theme === "dark" ? "text-[#38bdf8]" : "text-[#0ea5e9]"
                         : theme === "dark" ? "text-white/30 hover:text-white/50" : "text-slate-400 hover:text-slate-600",

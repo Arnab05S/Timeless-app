@@ -109,11 +109,11 @@ export default function SchedulePage() {
               className={cn(
                 "flex flex-col items-center px-4 py-3 rounded-2xl min-w-[60px] transition-all cursor-pointer border",
                 selectedDate === d.date
-                  ? "bg-gradient-to-b from-sky-100 to-emerald-50 border-sky-300 dark:from-sky-500/20 dark:to-emerald-500/10 dark:border-sky-500/30"
+                  ? (isDark ? "bg-gradient-to-b from-sky-500/20 to-emerald-500/10 border-sky-500/30" : "bg-gradient-to-b from-sky-100 to-emerald-50 border-sky-300")
                   : isDark ? "bg-white/[0.03] border-white/[0.04] hover:border-white/[0.08]" : "bg-white border-slate-200/60 hover:border-slate-300",
               )}>
               <span className={cn("text-[10px] font-medium uppercase", isDark ? "text-white/30" : "text-slate-400")}>{d.day}</span>
-              <span className={cn("text-lg font-bold mt-1", selectedDate === d.date ? "text-[#0ea5e9] dark:text-[#38bdf8]" : isDark ? "text-white/60" : "text-slate-700")}>{d.num}</span>
+              <span className={cn("text-lg font-bold mt-1", selectedDate === d.date ? (isDark ? "text-[#38bdf8]" : "text-[#0ea5e9]") : isDark ? "text-white/60" : "text-slate-700")}>{d.num}</span>
               {d.isToday && <div className="w-1 h-1 rounded-full bg-emerald-500 mt-1" />}
             </motion.button>
           ))}

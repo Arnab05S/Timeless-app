@@ -90,7 +90,9 @@ export default function QuizPage() {
             )}
             <div className="glass-card p-5 mb-8 text-left">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-sky-100 to-emerald-50 dark:from-sky-500/20 dark:to-emerald-500/20 flex items-center justify-center shrink-0"><Sparkles className="w-4 h-4 text-[#0ea5e9] dark:text-[#38bdf8]" /></div>
+                <div className={cn("w-8 h-8 rounded-xl bg-gradient-to-br flex items-center justify-center shrink-0", isDark ? "from-sky-500/20 to-emerald-500/20" : "from-sky-100 to-emerald-50")}>
+                  <Sparkles className={cn("w-4 h-4", isDark ? "text-[#38bdf8]" : "text-[#0ea5e9]")} />
+                </div>
                 <div>
                   <h3 className="text-sm font-semibold mb-1">AI Feedback</h3>
                   <p className={cn("text-sm leading-relaxed", isDark ? "text-white/40" : "text-slate-500")}>{getFeedback()}</p>
@@ -145,14 +147,14 @@ export default function QuizPage() {
                       <motion.button key={option} whileHover={!selectedAnswer ? { scale: 1.01 } : {}} whileTap={!selectedAnswer ? { scale: 0.99 } : {}}
                         onClick={() => !selectedAnswer && handleAnswer(option)} disabled={selectedAnswer !== null}
                         className={cn("w-full text-left px-5 py-4 rounded-2xl border transition-all cursor-pointer",
-                          showResult && isCorrectAnswer ? "bg-emerald-50 dark:bg-emerald-500/10 border-emerald-300 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-400"
-                            : showResult && isSelected && !isCorrectAnswer ? "bg-red-50 dark:bg-red-500/10 border-red-300 dark:border-red-500/30 text-red-600 dark:text-red-400"
+                          showResult && isCorrectAnswer ? (isDark ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-emerald-50 border-emerald-300 text-emerald-700")
+                            : showResult && isSelected && !isCorrectAnswer ? (isDark ? "bg-red-500/10 border-red-500/30 text-red-400" : "bg-red-50 border-red-300 text-red-600")
                               : isDark ? "bg-white/[0.03] border-white/[0.06] hover:border-white/[0.12] text-white/60" : "bg-white border-slate-200 hover:border-slate-300 text-slate-700",
                         )}>
                         <div className="flex items-center gap-3">
                           <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold shrink-0",
-                            showResult && isCorrectAnswer ? "bg-emerald-200 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400"
-                              : showResult && isSelected && !isCorrectAnswer ? "bg-red-200 dark:bg-red-500/20 text-red-600 dark:text-red-400"
+                            showResult && isCorrectAnswer ? (isDark ? "bg-emerald-500/20 text-emerald-400" : "bg-emerald-200 text-emerald-700")
+                              : showResult && isSelected && !isCorrectAnswer ? (isDark ? "bg-red-500/20 text-red-400" : "bg-red-200 text-red-600")
                                 : isDark ? "bg-white/5 text-white/30" : "bg-slate-100 text-slate-400",
                           )}>
                             {showResult && isCorrectAnswer ? <Check className="w-4 h-4" /> : showResult && isSelected && !isCorrectAnswer ? <X className="w-4 h-4" /> : option[0]}
@@ -190,7 +192,7 @@ export default function QuizPage() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="glass-card p-6 mb-6">
             <motion.div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center mb-4", isDark ? "bg-amber-500/10" : "bg-amber-100")} whileHover={{ rotate: [0, -8, 8, 0] }} transition={{ duration: 0.3 }}>
-              <Zap className="w-7 h-7 text-[#f59e0b] dark:text-[#ffd166]" />
+              <Zap className={cn("w-7 h-7", isDark ? "text-[#ffd166]" : "text-[#f59e0b]")} />
             </motion.div>
             <h2 className="text-lg font-semibold mb-4">Configure Your Quiz</h2>
             <div className="space-y-4">
@@ -216,9 +218,9 @@ export default function QuizPage() {
                   ))}
                 </div>
               </div>
-              <div className={cn("glass-card-light p-4 rounded-2xl", isDark ? "" : "")}>
+              <div className="glass-card-light p-4 rounded-2xl">
                 <div className="flex items-center gap-3">
-                  <Clock className="w-5 h-5 text-[#0ea5e9] dark:text-[#38bdf8]" />
+                  <Clock className={cn("w-5 h-5", isDark ? "text-[#38bdf8]" : "text-[#0ea5e9]")} />
                   <div><p className="text-sm font-medium">~10 minutes</p><p className={cn("text-[10px]", isDark ? "text-white/25" : "text-slate-400")}>10 questions · Mix of MCQ & True/False</p></div>
                 </div>
               </div>

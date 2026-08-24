@@ -51,17 +51,17 @@ export default function LearnPage() {
                     tool.color === "violet" && (isDark ? "bg-violet-500/10" : "bg-violet-100"),
                   )} whileHover={{ rotate: [0, -8, 8, 0] }} transition={{ duration: 0.3 }}>
                     <tool.icon className={cn("w-6 h-6",
-                      tool.color === "emerald" && "text-[#06d6a0]",
-                      tool.color === "amber" && "text-[#f59e0b] dark:text-[#ffd166]",
-                      tool.color === "violet" && "text-[#8b5cf6] dark:text-[#a78bfa]",
+                      tool.color === "emerald" && (isDark ? "text-[#06d6a0]" : "text-[#059669]"),
+                      tool.color === "amber" && (isDark ? "text-[#ffd166]" : "text-[#f59e0b]"),
+                      tool.color === "violet" && (isDark ? "text-[#a78bfa]" : "text-[#8b5cf6]"),
                     )} />
                   </motion.div>
                   <h3 className="text-lg font-semibold mb-1">{tool.label}</h3>
                   <p className={cn("text-sm leading-relaxed", isDark ? "text-white/40" : "text-slate-500")}>{tool.desc}</p>
                   <div className={cn("flex items-center gap-1.5 mt-3 text-xs font-medium",
-                    tool.color === "emerald" && "text-[#06d6a0]",
-                    tool.color === "amber" && "text-[#f59e0b] dark:text-[#ffd166]",
-                    tool.color === "violet" && "text-[#8b5cf6] dark:text-[#a78bfa]",
+                    tool.color === "emerald" && (isDark ? "text-[#06d6a0]" : "text-[#059669]"),
+                    tool.color === "amber" && (isDark ? "text-[#ffd166]" : "text-[#f59e0b]"),
+                    tool.color === "violet" && (isDark ? "text-[#a78bfa]" : "text-[#8b5cf6]"),
                   )}>
                     <span>{tool.count} {tool.countLabel}</span><ArrowRight className="w-3 h-3" />
                   </div>
@@ -83,7 +83,7 @@ export default function LearnPage() {
               {decks.slice(0, 4).map((deck) => (
                 <motion.div key={deck._id} whileHover={{ y: -2 }} className="glass-card-light px-4 py-3 flex items-center gap-3 cursor-pointer hover-glow" onClick={() => navigate("/app/learn/flashcards")}>
                   <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shrink-0", isDark ? "bg-emerald-500/10" : "bg-emerald-100")}>
-                    <Brain className="w-5 h-5 text-[#06d6a0]" />
+                    <Brain className={cn("w-5 h-5", isDark ? "text-[#06d6a0]" : "text-[#059669]")} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{deck.title}</p>
@@ -107,7 +107,7 @@ export default function LearnPage() {
               {uploads.slice(0, 3).map((upload) => (
                 <div key={upload._id} className="glass-card-light px-4 py-3 flex items-center gap-3 hover-lift">
                   <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shrink-0", isDark ? "bg-violet-500/10" : "bg-violet-100")}>
-                    <FileText className="w-5 h-5 text-[#8b5cf6] dark:text-[#a78bfa]" />
+                    <FileText className={cn("w-5 h-5", isDark ? "text-[#a78bfa]" : "text-[#8b5cf6]")} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{upload.title}</p>

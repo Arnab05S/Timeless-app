@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Upload, FileText, Sparkles, Brain, Zap, BookOpen, Check, ArrowRight } from "lucide-react";
+import { ArrowLeft, Upload, FileText, Sparkles, Brain, Zap, BookOpen, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -63,13 +63,14 @@ export default function UploadPage() {
         <AnimatePresence mode="wait">
           {analysisState === "idle" && (
             <motion.div key="upload" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-              <div className={cn("glass-card p-10 text-center transition-all cursor-pointer", dragOver ? "border-violet-400 dark:border-violet-500/40 bg-violet-50 dark:bg-violet-500/5" : isDark ? "hover:border-white/[0.1]" : "hover:border-slate-300")}
+              <div className={cn("glass-card p-10 text-center transition-all cursor-pointer",
+                dragOver ? (isDark ? "border-violet-500/40 bg-violet-500/5" : "border-violet-400 bg-violet-50") : isDark ? "hover:border-white/[0.1]" : "hover:border-slate-300")}
                 onDragOver={(e) => { e.preventDefault(); setDragOver(true); }} onDragLeave={() => setDragOver(false)}
                 onDrop={(e) => { e.preventDefault(); setDragOver(false); const file = e.dataTransfer.files[0]; if (file) handleFileSelect(file); }}
                 onClick={() => { const input = document.createElement("input"); input.type = "file"; input.accept = ".pdf,.doc,.docx,.txt"; input.onchange = (e) => { const file = (e.target as HTMLInputElement).files?.[0]; if (file) handleFileSelect(file); }; input.click(); }}>
                 {fileName ? (
                   <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }} className="flex flex-col items-center">
-                    <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center mb-4", isDark ? "bg-violet-500/10" : "bg-violet-100")}><FileText className="w-8 h-8 text-[#8b5cf6] dark:text-[#a78bfa]" /></div>
+                    <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center mb-4", isDark ? "bg-violet-500/10" : "bg-violet-100")}><FileText className={cn("w-8 h-8", isDark ? "text-[#a78bfa]" : "text-[#8b5cf6]")} /></div>
                     <p className="text-sm font-medium mb-1">{fileName}</p>
                     <p className={cn("text-xs", isDark ? "text-white/30" : "text-slate-400")}>Click to change file</p>
                   </motion.div>
@@ -117,7 +118,7 @@ export default function UploadPage() {
           {analysisState === "done" && analysisResult && (
             <motion.div key="results" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
               <div className="flex items-center gap-2 mb-6 text-emerald-500">
-                <div className="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center"><Check className="w-3.5 h-3.5" /></div>
+                <div className={cn("w-6 h-6 rounded-full flex items-center justify-center", isDark ? "bg-emerald-500/20" : "bg-emerald-100")}><Check className="w-3.5 h-3.5" /></div>
                 <span className="text-sm font-medium">Analysis complete — 6 key concepts found</span>
               </div>
               <div className="glass-card p-5 mb-4">
@@ -144,10 +145,18 @@ export default function UploadPage() {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3 mb-6">
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}><Button className="w-full bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-200 dark:hover:bg-emerald-500/20 cursor-pointer" onClick={() => navigate("/app/learn/flashcards")}><Brain className="w-4 h-4 mr-1.5" />Flashcards</Button></motion.div>
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}><Button className="w-full bg-amber-100 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-500/20 cursor-pointer" onClick={() => navigate("/app/learn/quiz")}><Zap className="w-4 h-4 mr-1.5" />Create Quiz</Button></motion.div>
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}><Button className="w-full bg-sky-100 dark:bg-sky-500/10 text-sky-700 dark:text-[#38bdf8] hover:bg-sky-200 dark:hover:bg-sky-500/20 cursor-pointer"><BookOpen className="w-4 h-4 mr-1.5" />Revision Plan</Button></motion.div>
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}><Button variant="outline" className={cn("cursor-pointer", isDark ? "border-white/10 text-white/60 hover:text-white" : "border-slate-200 text-slate-600 hover:text-slate-900")} onClick={() => setAnalysisState("idle")}><Upload className="w-4 h-4 mr-1.5" />Upload Another</Button></motion.div>
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                  <Button className={cn("w-full cursor-pointer", isDark ? "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20" : "bg-emerald-100 text-emerald-700 hover:bg-emerald-200")} onClick={() => navigate("/app/learn/flashcards")}><Brain className="w-4 h-4 mr-1.5" />Flashcards</Button>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                  <Button className={cn("w-full cursor-pointer", isDark ? "bg-amber-500/10 text-amber-400 hover:bg-amber-500/20" : "bg-amber-100 text-amber-700 hover:bg-amber-200")} onClick={() => navigate("/app/learn/quiz")}><Zap className="w-4 h-4 mr-1.5" />Create Quiz</Button>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                  <Button className={cn("w-full cursor-pointer", isDark ? "bg-sky-500/10 text-[#38bdf8] hover:bg-sky-500/20" : "bg-sky-100 text-sky-700 hover:bg-sky-200")}><BookOpen className="w-4 h-4 mr-1.5" />Revision Plan</Button>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                  <Button variant="outline" className={cn("cursor-pointer", isDark ? "border-white/10 text-white/60 hover:text-white" : "border-slate-200 text-slate-600 hover:text-slate-900")} onClick={() => setAnalysisState("idle")}><Upload className="w-4 h-4 mr-1.5" />Upload Another</Button>
+                </motion.div>
               </div>
             </motion.div>
           )}
@@ -159,7 +168,7 @@ export default function UploadPage() {
             <div className="space-y-2">
               {uploads.map((upload) => (
                 <div key={upload._id} className="glass-card-light px-4 py-3 flex items-center gap-3 hover-lift">
-                  <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shrink-0", isDark ? "bg-violet-500/10" : "bg-violet-100")}><FileText className="w-5 h-5 text-[#8b5cf6] dark:text-[#a78bfa]" /></div>
+                  <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shrink-0", isDark ? "bg-violet-500/10" : "bg-violet-100")}><FileText className={cn("w-5 h-5", isDark ? "text-[#a78bfa]" : "text-[#8b5cf6]")} /></div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{upload.title}</p>
                     <p className={cn("text-[10px]", isDark ? "text-white/25" : "text-slate-400")}>{upload.subject || "General"} · {upload.status === "ready" ? <span className="text-emerald-500">Analyzed</span> : <span className="text-amber-500">Processing</span>}</p>
