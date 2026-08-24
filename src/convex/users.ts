@@ -12,6 +12,25 @@ export const currentUser = query({
   },
 });
 
+export const setAccountType = mutation({
+  args: {
+    accountType: v.union(v.literal("student"), v.literal("teacher")),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+    const userId = identity.subject as any;
+    const user = await ctx.db.query("users").filter(q => q.eq(q.field("_id"), userId)).first();
+    if (!user) throw new Error("User not found");
+    // Create user record if it doesn't exist yet (first time)
+    if (!user.accountType) {
+      await ctx.db.patch(user._id, { accountType: args.accountType });
+    } else {
+      await ctx.db.patch(user._id, { accountType: args.accountType });
+    }
+  },
+});
+
 export const updateProfile = mutation({
   args: {
     name: v.optional(v.string()),
