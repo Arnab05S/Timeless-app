@@ -17,7 +17,8 @@ import {
 import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/hooks/use-theme";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Loader2, Mail, UserX, Clock, Sun, Moon, GraduationCap, BookOpen } from "lucide-react";
+import { ArrowRight, Loader2, Mail, UserX, Sun, Moon, GraduationCap, BookOpen } from "lucide-react";
+import Logo from "@/components/Logo";
 import { Suspense, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router";
@@ -169,11 +170,8 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
         >
-          <div
-            className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0ea5e9] to-[#06d6a0] flex items-center justify-center cursor-pointer shadow-lg shadow-sky-500/20"
-            onClick={() => navigate("/")}
-          >
-            <Clock className="w-8 h-8 text-white" strokeWidth={2.5} />
+          <div className="cursor-pointer" onClick={() => navigate("/")}>
+            <Logo size="lg" className="rounded-2xl" />
           </div>
         </motion.div>
 

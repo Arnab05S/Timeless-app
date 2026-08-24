@@ -1,7 +1,6 @@
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useRef, useEffect } from "react";
 import {
-  Clock,
   BookOpen,
   Brain,
   Sparkles,
@@ -12,6 +11,7 @@ import {
   Sun,
   Moon,
 } from "lucide-react";
+import Logo from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
 import { useAuth } from "@/hooks/use-auth";
@@ -89,9 +89,7 @@ export default function Landing() {
       <motion.nav initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="relative z-20 px-6 py-5">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <motion.div className="flex items-center gap-2.5" whileHover={{ scale: 1.02 }}>
-            <div className={cn("w-9 h-9 rounded-xl bg-gradient-to-br from-[#0ea5e9] to-[#06d6a0] flex items-center justify-center shadow-lg", isDark ? "shadow-sky-500/10" : "shadow-sky-500/20")}>
-              <Clock className="w-5 h-5 text-white" strokeWidth={2.5} />
-            </div>
+            <Logo size="md" className="rounded-xl" />
             <span className="text-xl font-bold tracking-tight">Timeless</span>
           </motion.div>
           <div className="flex items-center gap-3">
@@ -293,9 +291,7 @@ export default function Landing() {
       <footer className={cn("relative z-10 border-t px-6 py-8", isDark ? "border-white/5" : "border-slate-200/60")}>
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#0ea5e9] to-[#06d6a0] flex items-center justify-center">
-              <Clock className="w-4 h-4 text-white" strokeWidth={2.5} />
-            </div>
+            <Logo size="sm" className="rounded-lg" />
             <span className={cn("text-sm font-medium", isDark ? "text-white/50" : "text-slate-500")}>Timeless</span>
           </div>
           <p className={cn("text-xs", isDark ? "text-white/30" : "text-slate-400")}>Master your time. Master your learning.</p>
