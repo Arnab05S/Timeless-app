@@ -15,8 +15,11 @@ import {
 } from "@/components/ui/input-otp";
 
 import { useAuth } from "@/hooks/use-auth";
-import { ArrowRight, Loader2, Mail, UserX, Clock } from "lucide-react";
+import { useTheme } from "@/hooks/use-theme";
+import { cn } from "@/lib/utils";
+import { ArrowRight, Loader2, Mail, UserX, Clock, Sun, Moon } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router";
 
 interface AuthProps {
@@ -35,6 +38,7 @@ function resolveRedirectAfterAuth(
 
 function Auth({ redirectAfterAuth }: AuthProps = {}) {
   const { isLoading: authLoading, isAuthenticated, signIn } = useAuth();
+  const { theme, toggleTheme, isDark } = useTheme();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirect = resolveRedirectAfterAuth(
@@ -62,11 +66,10 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
       setStep({ email: formData.get("email") as string });
       setIsLoading(false);
     } catch (error) {
-      console.error("Email sign-in error:", error);
       setError(
         error instanceof Error
           ? error.message
-          : "Unable to send verification code. Please try again.",
+          : "Failed to send verification code. Please try again.",
       );
       setIsLoading(false);
     }
@@ -80,9 +83,8 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
       const formData = new FormData(event.currentTarget);
       await signIn("email-otp", formData);
       navigate(redirect);
-    } catch (error) {
-      console.error("OTP verification error:", error);
-      setError("The verification code is incorrect. Please try again.");
+    } catch {
+      setError("The verification code you entered is incorrect.");
       setIsLoading(false);
       setOtp("");
     }
@@ -95,54 +97,95 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
       await signIn("anonymous");
       navigate(redirect);
     } catch (error) {
-      console.error("Guest login error:", error);
-      setError(
-        `Unable to continue as guest: ${error instanceof Error ? error.message : "Unknown error"}`,
-      );
+      setError(`Failed to sign in as guest: ${error instanceof Error ? error.message : "Unknown error"}`);
       setIsLoading(false);
     }
   };
 
+  const inputClasses = cn(
+    "transition-colors duration-200",
+    isDark
+      ? "bg-white/[0.05] border-white/[0.08] text-white placeholder:text-white/20 focus-visible:ring-sky-500/30"
+      : "bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500/30",
+  );
+
   return (
-    <div className="min-h-screen bg-[#050a18] flex flex-col items-center justify-center relative overflow-hidden">
+    <div
+      className={cn(
+        "min-h-screen flex flex-col items-center justify-center relative overflow-hidden transition-colors duration-500",
+        isDark ? "bg-[#050a18]" : "bg-[#f0f4f8]",
+      )}
+    >
       {/* Ambient background */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[radial-gradient(circle,rgba(56,189,248,0.06)_0%,transparent_70%)] animate-float" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(6,214,160,0.04)_0%,transparent_70%)] animate-float-delay" />
+        <div className="absolute -top-[20%] -left-[10%] w-[600px] h-[600px] rounded-full animate-float ambient-orb-1" />
+        <div className="absolute -bottom-[20%] -right-[10%] w-[500px] h-[500px] rounded-full animate-float-delay ambient-orb-2" />
       </div>
 
-      <div className="relative z-10 w-full max-w-[400px] px-6">
+      {/* Theme toggle */}
+      <motion.button
+        whileHover={{ scale: 1.1, rotate: isDark ? 180 : 0 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={toggleTheme}
+        className={cn(
+          "fixed top-5 right-5 z-50 w-10 h-10 rounded-xl flex items-center justify-center transition-colors cursor-pointer",
+          isDark
+            ? "bg-white/5 hover:bg-white/10 text-white/50"
+            : "bg-slate-200/60 hover:bg-slate-200 text-slate-500",
+        )}
+      >
+        {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+      </motion.button>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="relative z-10 w-full max-w-[400px] px-6"
+      >
         {/* Logo */}
-        <div className="flex justify-center mb-8">
+        <motion.div
+          className="flex justify-center mb-8"
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
+        >
           <div
-            className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#38bdf8] to-[#06d6a0] flex items-center justify-center cursor-pointer"
+            className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0ea5e9] to-[#06d6a0] flex items-center justify-center cursor-pointer shadow-lg shadow-sky-500/20"
             onClick={() => navigate("/")}
           >
-            <Clock className="w-8 h-8 text-[#050a18]" strokeWidth={2.5} />
+            <Clock className="w-8 h-8 text-white" strokeWidth={2.5} />
           </div>
-        </div>
+        </motion.div>
 
-        <Card className="border-white/[0.06] bg-white/[0.03] backdrop-blur-xl shadow-2xl shadow-black/20 rounded-3xl">
+        <Card
+          className={cn(
+            "rounded-3xl shadow-2xl transition-colors duration-300",
+            isDark
+              ? "border-white/[0.06] bg-white/[0.03] backdrop-blur-xl shadow-black/20"
+              : "border-slate-200/60 bg-white/80 backdrop-blur-xl shadow-slate-900/5",
+          )}
+        >
           {step === "signIn" ? (
             <>
               <CardHeader className="text-center pb-4">
-                <CardTitle className="text-xl text-white">
-                  Sign in to Timeless
+                <CardTitle className={cn("text-xl", isDark ? "text-white" : "text-slate-900")}>
+                  Welcome to Timeless
                 </CardTitle>
-                <CardDescription className="text-white/35">
-                  Enter your email to access your workspace
+                <CardDescription className={cn(isDark ? "text-white/40" : "text-slate-500")}>
+                  Enter your email to get started
                 </CardDescription>
               </CardHeader>
               <form onSubmit={handleEmailSubmit}>
                 <CardContent>
                   <div className="relative flex items-center gap-2">
                     <div className="relative flex-1">
-                      <Mail className="absolute left-3 top-3 h-4 w-4 text-white/25" />
+                      <Mail className={cn("absolute left-3 top-3 h-4 w-4", isDark ? "text-white/30" : "text-slate-400")} />
                       <Input
                         name="email"
-                        placeholder="name@company.com"
+                        placeholder="name@example.com"
                         type="email"
-                        className="pl-9 bg-white/[0.05] border-white/[0.08] text-white placeholder:text-white/20 focus-visible:ring-[#38bdf8]/30"
+                        className={cn("pl-9", inputClasses)}
                         disabled={isLoading}
                         required
                       />
@@ -151,7 +194,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                       type="submit"
                       size="icon"
                       disabled={isLoading}
-                      className="bg-gradient-to-r from-[#38bdf8] to-[#06d6a0] text-[#050a18] hover:opacity-90 shrink-0"
+                      className="bg-gradient-to-r from-[#0ea5e9] to-[#06d6a0] text-white hover:opacity-90 shrink-0 shadow-lg shadow-sky-500/20"
                     >
                       {isLoading ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
@@ -160,31 +203,33 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                       )}
                     </Button>
                   </div>
-                  {error && (
-                    <p className="mt-3 text-sm text-[#f87171]">{error}</p>
-                  )}
+                  {error && <p className="mt-3 text-sm text-red-500">{error}</p>}
 
                   <div className="mt-6">
                     <div className="relative">
                       <div className="absolute inset-0 flex items-center">
-                        <span className="w-full border-t border-white/[0.06]" />
+                        <span className={cn("w-full border-t", isDark ? "border-white/[0.06]" : "border-slate-200")} />
                       </div>
                       <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-[#0a1128] px-3 text-white/25">
+                        <span className={cn("px-3", isDark ? "bg-[#0a1128] text-white/30" : "bg-[#f0f4f8] text-slate-400")}>
                           or
                         </span>
                       </div>
                     </div>
-
                     <Button
                       type="button"
                       variant="outline"
-                      className="w-full mt-4 border-white/[0.08] bg-white/[0.03] text-white/50 hover:text-white hover:bg-white/[0.06] cursor-pointer"
+                      className={cn(
+                        "w-full mt-4 cursor-pointer",
+                        isDark
+                          ? "border-white/[0.08] bg-white/[0.03] text-white/60 hover:text-white hover:bg-white/[0.06]"
+                          : "border-slate-200 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50",
+                      )}
                       onClick={handleGuestLogin}
                       disabled={isLoading}
                     >
                       <UserX className="mr-2 h-4 w-4" />
-                      Continue without an account
+                      Continue as Guest
                     </Button>
                   </div>
                 </CardContent>
@@ -193,18 +238,17 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
           ) : (
             <>
               <CardHeader className="text-center pb-4">
-                <CardTitle className="text-xl text-white">
-                  Verify your email
+                <CardTitle className={cn("text-xl", isDark ? "text-white" : "text-slate-900")}>
+                  Check your email
                 </CardTitle>
-                <CardDescription className="text-white/35">
-                  A verification code has been sent to {step.email}
+                <CardDescription className={cn(isDark ? "text-white/40" : "text-slate-500")}>
+                  We've sent a code to {step.email}
                 </CardDescription>
               </CardHeader>
               <form onSubmit={handleOtpSubmit}>
                 <CardContent className="pb-4">
                   <input type="hidden" name="email" value={step.email} />
                   <input type="hidden" name="code" value={otp} />
-
                   <div className="flex justify-center">
                     <InputOTP
                       value={otp}
@@ -220,43 +264,37 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     >
                       <InputOTPGroup>
                         {Array.from({ length: 6 }).map((_, index) => (
-                          <InputOTPSlot key={index} index={index} className="bg-white/[0.05] border-white/[0.08] text-white" />
+                          <InputOTPSlot
+                            key={index}
+                            index={index}
+                            className={cn(
+                              isDark
+                                ? "bg-white/[0.05] border-white/[0.08] text-white"
+                                : "bg-slate-100 border-slate-200 text-slate-900",
+                            )}
+                          />
                         ))}
                       </InputOTPGroup>
                     </InputOTP>
                   </div>
-                  {error && (
-                    <p className="mt-3 text-sm text-[#f87171] text-center">
-                      {error}
-                    </p>
-                  )}
-                  <p className="text-sm text-white/25 text-center mt-4">
-                    Did not receive a code?{" "}
-                    <Button
-                      variant="link"
-                      className="p-0 h-auto text-[#38bdf8]"
-                      onClick={() => setStep("signIn")}
-                    >
-                      Use a different email
+                  {error && <p className="mt-3 text-sm text-red-500 text-center">{error}</p>}
+                  <p className={cn("text-sm text-center mt-4", isDark ? "text-white/30" : "text-slate-400")}>
+                    Didn't receive a code?{" "}
+                    <Button variant="link" className="p-0 h-auto text-[#0ea5e9] dark:text-[#38bdf8]" onClick={() => setStep("signIn")}>
+                      Try again
                     </Button>
                   </p>
                 </CardContent>
                 <CardFooter className="flex-col gap-2 px-6 pb-6">
                   <Button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-[#38bdf8] to-[#06d6a0] text-[#050a18] font-semibold hover:opacity-90 cursor-pointer"
+                    className="w-full bg-gradient-to-r from-[#0ea5e9] to-[#06d6a0] text-white font-semibold hover:opacity-90 cursor-pointer shadow-lg shadow-sky-500/20"
                     disabled={isLoading || otp.length !== 6}
                   >
                     {isLoading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Verifying...
-                      </>
+                      <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Verifying...</>
                     ) : (
-                      <>
-                        Verify and continue
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </>
+                      <>Verify code <ArrowRight className="ml-2 h-4 w-4" /></>
                     )}
                   </Button>
                   <Button
@@ -264,9 +302,12 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     variant="ghost"
                     onClick={() => setStep("signIn")}
                     disabled={isLoading}
-                    className="w-full text-white/35 hover:text-white hover:bg-white/5"
+                    className={cn(
+                      "w-full",
+                      isDark ? "text-white/40 hover:text-white hover:bg-white/5" : "text-slate-500 hover:text-slate-900 hover:bg-slate-100",
+                    )}
                   >
-                    Use a different email
+                    Use different email
                   </Button>
                 </CardFooter>
               </form>
@@ -274,21 +315,18 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
           )}
         </Card>
 
-        <p className="text-center text-[10px] text-white/15 mt-6">
-          Powered by{" "}
-          <a
-            href="https://freebuff.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-white/30 transition-colors"
-          >
+        <p className={cn("text-center text-[10px] mt-6", isDark ? "text-white/20" : "text-slate-400")}>
+          Secured by{" "}
+          <a href="https://freebuff.com" target="_blank" rel="noopener noreferrer" className="underline hover:opacity-80 transition-opacity">
             freebuff.com
           </a>
         </p>
-      </div>
+      </motion.div>
     </div>
   );
 }
+
+
 
 export default function AuthPage(props: AuthProps) {
   return (
