@@ -1,1 +1,0 @@
-import{j as m}from"./framer-motion-D7WxxqEd.js";import{c as r}from"./use-theme-CjR9Jh10.js";const t={sm:"w-7 h-7",md:"w-9 h-9",lg:"w-12 h-12",xl:"w-16 h-16"};function i({size:s="md",className:o}){return m.jsx("img",{src:"/logo.svg",alt:"Timeless",className:r(t[s],o)})}export{i as L};
