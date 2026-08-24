@@ -66,7 +66,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
       setError(
         error instanceof Error
           ? error.message
-          : "Failed to send verification code. Please try again.",
+          : "Unable to send verification code. Please try again.",
       );
       setIsLoading(false);
     }
@@ -82,7 +82,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
       navigate(redirect);
     } catch (error) {
       console.error("OTP verification error:", error);
-      setError("The verification code you entered is incorrect.");
+      setError("The verification code is incorrect. Please try again.");
       setIsLoading(false);
       setOtp("");
     }
@@ -96,7 +96,9 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
       navigate(redirect);
     } catch (error) {
       console.error("Guest login error:", error);
-      setError(`Failed to sign in as guest: ${error instanceof Error ? error.message : "Unknown error"}`);
+      setError(
+        `Unable to continue as guest: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
       setIsLoading(false);
     }
   };
@@ -105,8 +107,8 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
     <div className="min-h-screen bg-[#050a18] flex flex-col items-center justify-center relative overflow-hidden">
       {/* Ambient background */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[radial-gradient(circle,rgba(56,189,248,0.08)_0%,transparent_70%)] animate-float" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(6,214,160,0.06)_0%,transparent_70%)] animate-float-delay" />
+        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[radial-gradient(circle,rgba(56,189,248,0.06)_0%,transparent_70%)] animate-float" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(6,214,160,0.04)_0%,transparent_70%)] animate-float-delay" />
       </div>
 
       <div className="relative z-10 w-full max-w-[400px] px-6">
@@ -125,20 +127,20 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
             <>
               <CardHeader className="text-center pb-4">
                 <CardTitle className="text-xl text-white">
-                  Welcome to Timeless
+                  Sign in to Timeless
                 </CardTitle>
-                <CardDescription className="text-white/40">
-                  Enter your email to get started
+                <CardDescription className="text-white/35">
+                  Enter your email to access your workspace
                 </CardDescription>
               </CardHeader>
               <form onSubmit={handleEmailSubmit}>
                 <CardContent>
                   <div className="relative flex items-center gap-2">
                     <div className="relative flex-1">
-                      <Mail className="absolute left-3 top-3 h-4 w-4 text-white/30" />
+                      <Mail className="absolute left-3 top-3 h-4 w-4 text-white/25" />
                       <Input
                         name="email"
-                        placeholder="name@example.com"
+                        placeholder="name@company.com"
                         type="email"
                         className="pl-9 bg-white/[0.05] border-white/[0.08] text-white placeholder:text-white/20 focus-visible:ring-[#38bdf8]/30"
                         disabled={isLoading}
@@ -168,7 +170,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                         <span className="w-full border-t border-white/[0.06]" />
                       </div>
                       <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-[#0a1128] px-3 text-white/30">
+                        <span className="bg-[#0a1128] px-3 text-white/25">
                           or
                         </span>
                       </div>
@@ -177,12 +179,12 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     <Button
                       type="button"
                       variant="outline"
-                      className="w-full mt-4 border-white/[0.08] bg-white/[0.03] text-white/60 hover:text-white hover:bg-white/[0.06] cursor-pointer"
+                      className="w-full mt-4 border-white/[0.08] bg-white/[0.03] text-white/50 hover:text-white hover:bg-white/[0.06] cursor-pointer"
                       onClick={handleGuestLogin}
                       disabled={isLoading}
                     >
                       <UserX className="mr-2 h-4 w-4" />
-                      Continue as Guest
+                      Continue without an account
                     </Button>
                   </div>
                 </CardContent>
@@ -192,10 +194,10 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
             <>
               <CardHeader className="text-center pb-4">
                 <CardTitle className="text-xl text-white">
-                  Check your email
+                  Verify your email
                 </CardTitle>
-                <CardDescription className="text-white/40">
-                  We've sent a code to {step.email}
+                <CardDescription className="text-white/35">
+                  A verification code has been sent to {step.email}
                 </CardDescription>
               </CardHeader>
               <form onSubmit={handleOtpSubmit}>
@@ -228,14 +230,14 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                       {error}
                     </p>
                   )}
-                  <p className="text-sm text-white/30 text-center mt-4">
-                    Didn't receive a code?{" "}
+                  <p className="text-sm text-white/25 text-center mt-4">
+                    Did not receive a code?{" "}
                     <Button
                       variant="link"
                       className="p-0 h-auto text-[#38bdf8]"
                       onClick={() => setStep("signIn")}
                     >
-                      Try again
+                      Use a different email
                     </Button>
                   </p>
                 </CardContent>
@@ -252,7 +254,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                       </>
                     ) : (
                       <>
-                        Verify code
+                        Verify and continue
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </>
                     )}
@@ -262,9 +264,9 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     variant="ghost"
                     onClick={() => setStep("signIn")}
                     disabled={isLoading}
-                    className="w-full text-white/40 hover:text-white hover:bg-white/5"
+                    className="w-full text-white/35 hover:text-white hover:bg-white/5"
                   >
-                    Use different email
+                    Use a different email
                   </Button>
                 </CardFooter>
               </form>
@@ -272,13 +274,13 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
           )}
         </Card>
 
-        <p className="text-center text-[10px] text-white/20 mt-6">
-          Secured by{" "}
+        <p className="text-center text-[10px] text-white/15 mt-6">
+          Powered by{" "}
           <a
             href="https://freebuff.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline hover:text-white/40 transition-colors"
+            className="underline hover:text-white/30 transition-colors"
           >
             freebuff.com
           </a>

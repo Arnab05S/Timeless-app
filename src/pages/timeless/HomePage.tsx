@@ -10,8 +10,11 @@ import {
   CheckCircle2,
   Zap,
   TrendingUp,
+  Search,
+  LayoutGrid,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
@@ -37,9 +40,9 @@ export default function HomePage() {
 
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return "Good morning ☀️";
-    if (hour < 17) return "Good afternoon 🌤";
-    return "Good evening 🌙";
+    if (hour < 12) return "Good morning";
+    if (hour < 17) return "Good afternoon";
+    return "Good evening";
   };
 
   const totalTasks = todaySummary?.tasks.length ?? 0;
@@ -67,13 +70,26 @@ export default function HomePage() {
               <h1 className="text-3xl font-bold tracking-tight">
                 {getGreeting()}
               </h1>
-              <p className="text-white/40 mt-1">
-                Here's your study plan for today
+              <p className="text-white/35 mt-1">
+                Here is your study plan for today
               </p>
             </div>
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#38bdf8] to-[#06d6a0] flex items-center justify-center text-[#050a18] font-bold text-sm">
-              {user?.name?.[0]?.toUpperCase() || "?"}
+              {user?.name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || "?"}
             </div>
+          </div>
+        </motion.div>
+
+        {/* Search Bar */}
+        <motion.div variants={fadeUp} className="mb-6">
+          <div className="relative">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+            <Input
+              placeholder="Search subjects, materials, or topics..."
+              className="pl-10 bg-white/[0.03] border-white/[0.06] text-white placeholder:text-white/20 rounded-xl"
+              readOnly
+              onClick={() => navigate("/app/catalog")}
+            />
           </div>
         </motion.div>
 
@@ -91,21 +107,21 @@ export default function HomePage() {
               icon: Flame,
               label: "Study Streak",
               value: `${streak}d`,
-              sub: "Keep it going!",
+              sub: streak > 0 ? "Maintaining" : "Start today",
               color: "#ffd166",
             },
             {
               icon: Clock,
               label: "Study Time",
               value: todayMinutes > 0 ? `${todayMinutes}m` : "0m",
-              sub: `${totalMinutes}m planned`,
+              sub: `${totalMinutes}m total logged`,
               color: "#06d6a0",
             },
             {
               icon: TrendingUp,
-              label: "Progress",
+              label: "Completion",
               value: `${progress}%`,
-              sub: "of today's goal",
+              sub: "of today's schedule",
               color: "#a78bfa",
             },
           ].map((stat) => (
@@ -120,8 +136,8 @@ export default function HomePage() {
                 />
               </div>
               <p className="text-2xl font-bold">{stat.value}</p>
-              <p className="text-xs text-white/40 mt-0.5">{stat.label}</p>
-              <p className="text-[10px] text-white/25 mt-0.5">{stat.sub}</p>
+              <p className="text-xs text-white/35 mt-0.5">{stat.label}</p>
+              <p className="text-[10px] text-white/20 mt-0.5">{stat.sub}</p>
             </div>
           ))}
         </motion.div>
@@ -130,8 +146,8 @@ export default function HomePage() {
         {totalTasks > 0 && (
           <motion.div variants={fadeUp} className="glass-card p-5 mb-6">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold">Today's Progress</h3>
-              <span className="text-xs text-white/30">
+              <h3 className="text-sm font-semibold">Daily Progress</h3>
+              <span className="text-xs text-white/25">
                 {completedTasks}/{totalTasks} tasks
               </span>
             </div>
@@ -154,10 +170,10 @@ export default function HomePage() {
             </div>
             <div className="flex-1">
               <h3 className="text-sm font-semibold mb-1">AI Recommendation</h3>
-              <p className="text-sm text-white/50 leading-relaxed">
+              <p className="text-sm text-white/40 leading-relaxed">
                 {subjects && subjects.length > 0
-                  ? `You have ${subjects.length} subject${subjects.length > 1 ? "s" : ""} set up. Start a revision session or take a quick quiz to boost your learning today.`
-                  : "Add your subjects and exam dates to get personalized AI study recommendations."}
+                  ? `${subjects.length} subject${subjects.length > 1 ? "s" : ""} configured. Begin a revision session or take a quick assessment to reinforce your understanding.`
+                  : "Add your subjects and exam dates to receive personalized study recommendations."}
               </p>
               <div className="flex gap-2 mt-3">
                 <Button
@@ -174,7 +190,7 @@ export default function HomePage() {
                   onClick={() => navigate("/app/learn/quiz")}
                 >
                   <Zap className="w-3.5 h-3.5 mr-1.5" />
-                  Quick Quiz
+                  Quick Assessment
                 </Button>
               </div>
             </div>
@@ -184,30 +200,30 @@ export default function HomePage() {
         {/* Today's Tasks */}
         <motion.div variants={fadeUp} className="mb-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">Today's Tasks</h3>
+            <h3 className="text-lg font-semibold">Today's Schedule</h3>
             <Button
               variant="ghost"
               size="sm"
-              className="text-white/40 hover:text-white text-xs cursor-pointer"
+              className="text-white/35 hover:text-white text-xs cursor-pointer"
               onClick={() => navigate("/app/schedule")}
             >
-              View all <ArrowRight className="w-3 h-3 ml-1" />
+              Full schedule <ArrowRight className="w-3 h-3 ml-1" />
             </Button>
           </div>
 
           {!todaySummary || todaySummary.tasks.length === 0 ? (
             <div className="glass-card p-8 text-center">
               <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-3">
-                <CalendarDaysIcon className="w-6 h-6 text-white/20" />
+                <CalendarDaysIcon className="w-6 h-6 text-white/15" />
               </div>
-              <p className="text-sm text-white/30 mb-3">No tasks scheduled for today</p>
+              <p className="text-sm text-white/25 mb-3">No tasks scheduled for today</p>
               <Button
                 size="sm"
                 className="bg-[#38bdf8]/10 text-[#38bdf8] hover:bg-[#38bdf8]/20 text-xs cursor-pointer"
                 onClick={() => navigate("/app/schedule")}
               >
                 <Target className="w-3.5 h-3.5 mr-1.5" />
-                Add a task
+                Add your first task
               </Button>
             </div>
           ) : (
@@ -233,12 +249,12 @@ export default function HomePage() {
                     <p
                       className={cn(
                         "text-sm font-medium truncate",
-                        task.status === "completed" && "line-through text-white/30",
+                        task.status === "completed" && "line-through text-white/25",
                       )}
                     >
                       {task.title}
                     </p>
-                    <p className="text-[10px] text-white/25">
+                    <p className="text-[10px] text-white/20">
                       {task.scheduledTime && `${task.scheduledTime} · `}
                       {task.durationMinutes && `${task.durationMinutes}m`}
                     </p>
@@ -264,7 +280,7 @@ export default function HomePage() {
                 <Target className="w-5 h-5 text-[#38bdf8]" />
               </div>
               <p className="text-sm font-medium">Plan My Day</p>
-              <p className="text-[10px] text-white/30 mt-0.5">
+              <p className="text-[10px] text-white/25 mt-0.5">
                 Schedule study sessions
               </p>
             </button>
@@ -275,9 +291,9 @@ export default function HomePage() {
               <div className="w-10 h-10 rounded-xl bg-[#ffd166]/10 flex items-center justify-center mb-3 group-hover:bg-[#ffd166]/15 transition-colors">
                 <Zap className="w-5 h-5 text-[#ffd166]" />
               </div>
-              <p className="text-sm font-medium">Quick Quiz</p>
-              <p className="text-[10px] text-white/30 mt-0.5">
-                Test yourself in 10 minutes
+              <p className="text-sm font-medium">Rapid Quiz</p>
+              <p className="text-[10px] text-white/25 mt-0.5">
+                Test understanding in 10 minutes
               </p>
             </button>
             <button
@@ -288,20 +304,20 @@ export default function HomePage() {
                 <Brain className="w-5 h-5 text-[#06d6a0]" />
               </div>
               <p className="text-sm font-medium">Flashcards</p>
-              <p className="text-[10px] text-white/30 mt-0.5">
+              <p className="text-[10px] text-white/25 mt-0.5">
                 Review with spaced repetition
               </p>
             </button>
             <button
-              onClick={() => navigate("/app/learn/upload")}
+              onClick={() => navigate("/app/catalog")}
               className="glass-card p-4 text-left group hover:border-[#a78bfa]/20 transition-all cursor-pointer"
             >
               <div className="w-10 h-10 rounded-xl bg-[#a78bfa]/10 flex items-center justify-center mb-3 group-hover:bg-[#a78bfa]/15 transition-colors">
-                <BookOpen className="w-5 h-5 text-[#a78bfa]" />
+                <LayoutGrid className="w-5 h-5 text-[#a78bfa]" />
               </div>
-              <p className="text-sm font-medium">Upload PDF</p>
-              <p className="text-[10px] text-white/30 mt-0.5">
-                AI will analyze your material
+              <p className="text-sm font-medium">Browse Catalog</p>
+              <p className="text-[10px] text-white/25 mt-0.5">
+                Find materials and subjects
               </p>
             </button>
           </div>
@@ -309,7 +325,7 @@ export default function HomePage() {
 
         {/* Upcoming Deadlines */}
         {upcomingTasks && upcomingTasks.length > 0 && (
-          <motion.div variants={fadeUp} className="mb-6">
+          <motion.div variants={fadeUp} className="mb-6 pb-4">
             <h3 className="text-lg font-semibold mb-4">Upcoming</h3>
             <div className="space-y-2">
               {upcomingTasks.slice(0, 3).map((task) => (
@@ -322,7 +338,7 @@ export default function HomePage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{task.title}</p>
-                    <p className="text-[10px] text-white/25">
+                    <p className="text-[10px] text-white/20">
                       Due {task.scheduledDate}
                     </p>
                   </div>
@@ -369,5 +385,3 @@ function CalendarDaysIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
-
-
