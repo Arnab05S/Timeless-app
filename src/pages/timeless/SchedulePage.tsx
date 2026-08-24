@@ -386,11 +386,7 @@ export default function SchedulePage() {
                     onClick={handleAddTask}
                     disabled={!newTitle.trim()}
                   >
-                    {useMutation as unknown ? (
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    ) : (
-                      <Plus className="w-4 h-4 mr-2" />
-                    )}
+                    <Plus className="w-4 h-4 mr-2" />
                     Add Task
                   </Button>
                 </div>

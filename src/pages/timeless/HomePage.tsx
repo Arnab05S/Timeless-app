@@ -10,8 +10,8 @@ import {
   CheckCircle2,
   Zap,
   TrendingUp,
-  Search,
-  LayoutGrid,
+  Plus,
+  FileText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -80,18 +80,32 @@ export default function HomePage() {
           </div>
         </motion.div>
 
-        {/* Search Bar */}
-        <motion.div variants={fadeUp} className="mb-6">
-          <div className="relative">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
-            <Input
-              placeholder="Search subjects, materials, or topics..."
-              className="pl-10 bg-white/[0.03] border-white/[0.06] text-white placeholder:text-white/20 rounded-xl"
-              readOnly
-              onClick={() => navigate("/app/catalog")}
-            />
-          </div>
-        </motion.div>
+        {/* Welcome Onboarding (if no subjects) */}
+        {subjects && subjects.length === 0 && (
+          <motion.div variants={fadeUp} className="mb-6">
+            <div className="glass-card p-6 bg-gradient-to-r from-[#38bdf8]/5 to-[#06d6a0]/5 border-[#38bdf8]/20">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#38bdf8]/20 to-[#06d6a0]/20 flex items-center justify-center shrink-0">
+                  <Sparkles className="w-6 h-6 text-[#38bdf8]" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-base font-semibold mb-1">Welcome to Timeless</h3>
+                  <p className="text-sm text-white/40 mb-3">
+                    Start by adding your subjects. Timeless will use this to create a personalized study plan for you.
+                  </p>
+                  <Button
+                    size="sm"
+                    className="bg-gradient-to-r from-[#38bdf8] to-[#06d6a0] text-[#050a18] font-semibold text-xs cursor-pointer"
+                    onClick={() => navigate("/app/profile")}
+                  >
+                    <Plus className="w-3.5 h-3.5 mr-1.5" />
+                    Add Your First Subject
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {/* Stats Row */}
         <motion.div variants={fadeUp} className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
@@ -309,15 +323,15 @@ export default function HomePage() {
               </p>
             </button>
             <button
-              onClick={() => navigate("/app/catalog")}
+              onClick={() => navigate("/app/learn/upload")}
               className="glass-card p-4 text-left group hover:border-[#a78bfa]/20 transition-all cursor-pointer"
             >
               <div className="w-10 h-10 rounded-xl bg-[#a78bfa]/10 flex items-center justify-center mb-3 group-hover:bg-[#a78bfa]/15 transition-colors">
-                <LayoutGrid className="w-5 h-5 text-[#a78bfa]" />
+                <FileText className="w-5 h-5 text-[#a78bfa]" />
               </div>
-              <p className="text-sm font-medium">Browse Catalog</p>
+              <p className="text-sm font-medium">Upload PDF</p>
               <p className="text-[10px] text-white/25 mt-0.5">
-                Find materials and subjects
+                AI will analyze your material
               </p>
             </button>
           </div>
