@@ -14,7 +14,7 @@ const Landing = lazy(() => import("./pages/Landing.tsx"));
 const AuthPage = lazy(() => import("./pages/Auth.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
-// Timeless app pages
+// Student app pages
 const AppShell = lazy(() => import("./pages/timeless/AppShell.tsx"));
 const HomePage = lazy(() => import("./pages/timeless/HomePage.tsx"));
 const SchedulePage = lazy(() => import("./pages/timeless/SchedulePage.tsx"));
@@ -25,17 +25,25 @@ const UploadPage = lazy(() => import("./pages/timeless/UploadPage.tsx"));
 const ProgressPage = lazy(() => import("./pages/timeless/ProgressPage.tsx"));
 const ProfilePage = lazy(() => import("./pages/timeless/ProfilePage.tsx"));
 
+// Teacher app pages
+const TeacherShell = lazy(() => import("./pages/teacher/TeacherShell.tsx"));
+const TeacherDashboard = lazy(() => import("./pages/teacher/TeacherDashboard.tsx"));
+const ClassesPage = lazy(() => import("./pages/teacher/ClassesPage.tsx"));
+const CreatePage = lazy(() => import("./pages/teacher/CreatePage.tsx"));
+const AnalyticsPage = lazy(() => import("./pages/teacher/AnalyticsPage.tsx"));
+const TeacherProfile = lazy(() => import("./pages/teacher/TeacherProfile.tsx"));
+
 function RouteLoading() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#050a18]">
+    <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="flex flex-col items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#38bdf8] to-[#06d6a0] flex items-center justify-center animate-pulse">
-          <svg className="w-5 h-5 text-[#050a18]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0ea5e9] to-[#06d6a0] flex items-center justify-center animate-pulse">
+          <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <circle cx="12" cy="12" r="10" />
             <polyline points="12 6 12 12 16 14" />
           </svg>
         </div>
-        <p className="text-xs text-white/30">Loading...</p>
+        <p className="text-xs text-muted-foreground">Loading...</p>
       </div>
     </div>
   );
@@ -75,12 +83,10 @@ class RootErrorBoundary extends React.Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-[#050a18] text-white p-6">
+        <div className="min-h-screen flex items-center justify-center bg-background text-foreground p-6">
           <div className="max-w-lg text-center">
             <p className="text-sm font-semibold">Preview runtime error</p>
-            <p className="mt-2 text-xs text-white/50 break-words">
-              {this.state.message}
-            </p>
+            <p className="mt-2 text-xs text-muted-foreground break-words">{this.state.message}</p>
           </div>
         </div>
       );
@@ -94,10 +100,7 @@ const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
 function RouteSyncer() {
   const location = useLocation();
   useEffect(() => {
-    window.parent.postMessage(
-      { type: "iframe-route-change", path: location.pathname },
-      "*",
-    );
+    window.parent.postMessage({ type: "iframe-route-change", path: location.pathname }, "*");
   }, [location.pathname]);
 
   useEffect(() => {
@@ -126,12 +129,9 @@ createRoot(document.getElementById("root")!).render(
           <Suspense fallback={<RouteLoading />}>
             <Routes>
               <Route path="/" element={<Landing />} />
-              <Route
-                path="/auth"
-                element={<AuthPage redirectAfterAuth="/app" />}
-              />
+              <Route path="/auth" element={<AuthPage redirectAfterAuth="/app" />} />
 
-              {/* Timeless App Routes */}
+              {/* Student Routes */}
               <Route
                 path="/app"
                 element={
@@ -148,6 +148,23 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="learn/upload" element={<UploadPage />} />
                 <Route path="progress" element={<ProgressPage />} />
                 <Route path="profile" element={<ProfilePage />} />
+              </Route>
+
+              {/* Teacher Routes */}
+              <Route
+                path="/teacher"
+                element={
+                  <RequireAuth>
+                    <TeacherShell />
+                  </RequireAuth>
+                }
+              >
+                <Route index element={<TeacherDashboard />} />
+                <Route path="classes" element={<ClassesPage />} />
+                <Route path="classes/:classId" element={<ClassesPage />} />
+                <Route path="create" element={<CreatePage />} />
+                <Route path="analytics" element={<AnalyticsPage />} />
+                <Route path="profile" element={<TeacherProfile />} />
               </Route>
 
               <Route path="*" element={<NotFound />} />

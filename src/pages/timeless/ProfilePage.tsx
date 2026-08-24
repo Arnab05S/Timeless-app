@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { User, LogOut, BookOpen, Plus, X, Clock, Moon, Sun, Bell, Shield, ChevronRight, Palette } from "lucide-react";
+import { User, LogOut, BookOpen, Plus, X, Clock, Moon, Sun, Bell, Shield, ChevronRight, Palette, GraduationCap, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
@@ -79,6 +79,22 @@ export default function ProfilePage() {
               </div>
             </div>
           </div>
+        </Reveal>
+
+        {/* Switch to Teacher */}
+        <Reveal className="mb-6" delay={0.05}>
+          <motion.div whileHover={{ y: -2 }} className="glass-card p-5 cursor-pointer hover-glow" onClick={() => navigate("/teacher")}>
+            <div className="flex items-center gap-3">
+              <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center", isDark ? "bg-emerald-500/10" : "bg-emerald-100")}>
+                <GraduationCap className="w-5 h-5 text-emerald-500" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-medium">Switch to Teacher Mode</p>
+                <p className={cn("text-[10px]", isDark ? "text-white/25" : "text-slate-400")}>Manage classes, create quizzes, and track student performance</p>
+              </div>
+              <ArrowRight className={cn("w-4 h-4", isDark ? "text-white/15" : "text-slate-300")} />
+            </div>
+          </motion.div>
         </Reveal>
 
         {/* Subjects */}
